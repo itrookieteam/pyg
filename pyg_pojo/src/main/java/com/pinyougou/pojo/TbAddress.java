@@ -2,6 +2,8 @@ package com.pinyougou.pojo;
 
 import java.io.Serializable;
 import java.util.Date;
+/*
+* 李宁到此一游*/
 
 public class TbAddress implements Serializable {
     /**
