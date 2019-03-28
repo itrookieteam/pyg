@@ -44,7 +44,6 @@ public class UserController {
 		if(!smsCode){//返回的是false
 			return new Result(false, "短信验证码输入错误！！！");
 		}*/
-		System.out.println("第一次测试提交");
 		try {
 			userService.add(user);
 			return new Result(true, "增加成功");
