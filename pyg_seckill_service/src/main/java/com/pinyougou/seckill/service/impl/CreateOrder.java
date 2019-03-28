@@ -32,6 +32,7 @@ public class CreateOrder implements Runnable{
         goods.setStockCount(goods.getStockCount() - 1);
         goodsMapper.updateByPrimaryKey(goods);
         //郭浩坤测试提交
+        //11222112
 
     }
 }
