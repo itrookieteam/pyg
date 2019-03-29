@@ -1,8 +1,13 @@
 package com.pinyougou.sellergoods.service;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 import com.pinyougou.pojo.TbSeller;
 
 import entity.PageResult;
+import org.springframework.web.multipart.MultipartFile;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -59,4 +64,10 @@ public interface SellerService {
 	public PageResult findPage(TbSeller seller, int pageNum, int pageSize);
 
 	public void updateStatus(String sellerId,String status);
+
+	/**
+	 * 导出Excel
+	 */
+	public void exportExcel() throws Exception;
+
 }

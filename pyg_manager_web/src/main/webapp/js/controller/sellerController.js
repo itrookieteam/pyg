@@ -106,4 +106,14 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 		)
     }
 
+    $scope.status = ["未审核","已审核"];
+
+	//导出Excel
+	$scope.exportExcel = function () {
+		sellerService.exportExcel().success(
+			function (response) {
+				alert(response.message);
+            }
+		)
+    }
 });	

@@ -5,10 +5,15 @@ import com.pinyougou.pojo.TbSeller;
 import com.pinyougou.sellergoods.service.SellerService;
 import entity.PageResult;
 import entity.Result;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Row;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -128,5 +133,50 @@ public class SellerController {
 			return new Result(false, "审核失败");
 		}
 	}
+
+	@RequestMapping("/exportExcel")
+	public Result exportExcel(){
+		try {
+			sellerService.exportExcel();
+			return new Result(true,"导出成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false,"导出失败");
+		}
+	}
+
+    @RequestMapping("/importExcel")
+    public Result importExcel(MultipartFile file){
+        try {
+        	//获取文件名
+			String filename = file.getOriginalFilename();
+			//结果文件后缀
+			String houzui = filename.substring(filename.lastIndexOf("."));//包含当前索引
+			System.out.println("fileName + " + filename + " + " + houzui);
+			//判断后缀名
+			if(".xls".equals(houzui) || ".xlsx".equals(houzui)){
+				//获取文件流对象
+				InputStream inputStream = file.getInputStream();
+				//获取工作薄
+				HSSFWorkbook workbook = new HSSFWorkbook(inputStream);
+				//获取工作表
+				HSSFSheet sheet = workbook.getSheetAt(0);
+				//循环获取表格数据
+				for (Row row : sheet) {
+					if(row.getRowNum() == 0){
+						continue;
+					}
+					String value = row.getCell(0).getStringCellValue();
+					System.out.println(value);
+				}
+				return new Result(true,"导入成功");
+			}else{
+				return new Result(false,"请选择正确的Excel文件");
+			}
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false,"导入失败");
+        }
+    }
 
 }
