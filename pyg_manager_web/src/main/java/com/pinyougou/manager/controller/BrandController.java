@@ -14,7 +14,7 @@ import entity.Result;
 /**
  * controller
  * @author Administrator
- *
+ *李宁01
  */
 @RestController
 @RequestMapping("/brand")
