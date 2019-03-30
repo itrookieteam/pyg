@@ -18,7 +18,7 @@ public class StatisticServiceImpl implements StatisticService {
     private TbItemMapper itemMapper;
 
     @Override
-    public List findAll(String sellerId) {
+    public List<TbItem> findAll(String sellerId) {
         TbItemExample example = new TbItemExample();
         example.createCriteria().andSellerIdEqualTo(sellerId);
         List<TbItem> tbItems = itemMapper.selectByExample(example);

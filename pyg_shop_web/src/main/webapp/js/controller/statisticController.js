@@ -8,4 +8,5 @@ app.controller('statisticController',function ($scope,statisticService) {
             }
         );
     }
-})
+});
+

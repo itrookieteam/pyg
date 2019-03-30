@@ -1,7 +1,9 @@
 package com.pinyougou.sellergoods.service;
 
+import com.pinyougou.pojo.TbItem;
+
 import java.util.List;
 
 public interface StatisticService {
-    public List findAll(String sellerId);
+    public List<TbItem> findAll(String sellerId);
 }
