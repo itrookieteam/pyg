@@ -36,4 +36,11 @@ app.service('seckillGoodsService',function($http){
         return $http.get('../seckillGoods/updateStatus.do?ids=' + ids + "&status=" + status);
 
     }
+
+
+
+    //查询实体修改秒杀商品额
+    this.findSeckillgoods=function(id){
+        return $http.get('../seckillGoods/findSeckillgoods.do?id='+id);
+    }
 });

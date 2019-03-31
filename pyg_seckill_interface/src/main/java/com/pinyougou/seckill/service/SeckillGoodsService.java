@@ -35,7 +35,7 @@ public interface SeckillGoodsService {
 	/**
 	 * 修改
 	 */
-	public void update(TbSeckillGoods seckillGoods);
+	public void update(SeckillGoods seckillGoods);
 	
 
 	/**
@@ -63,4 +63,6 @@ public interface SeckillGoodsService {
 
 	//商家提交审核
 	public void updateStatus(Long [] ids, String status);
+
+    public SeckillGoods findSeckillgoods(Long id);
 }

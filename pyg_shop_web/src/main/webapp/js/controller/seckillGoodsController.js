@@ -36,7 +36,8 @@ app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoo
 	//保存 
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
-		if($scope.entity.id!=null){//如果有ID
+		if($scope.entity.tbSeckillGoods.id!=null){//如果有ID
+           // alert(entity.tbSeckillGoods.id)
 			serviceObject=seckillGoodsService.update( $scope.entity); //修改
 		}else{
 			serviceObject=seckillGoodsService.add( $scope.entity );//增加
@@ -174,5 +175,20 @@ app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoo
         )
 
     }
+
+
+    //修改秒杀商品
+    $scope.findSeckillgoods=function(id){
+        alert(id);
+        seckillGoodsService.findSeckillgoods(id).success(
+            function(response){
+                alert(response);
+                $scope.entity= response;
+            }
+        );
+    }
+
+
+
 
 });

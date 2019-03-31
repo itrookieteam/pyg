@@ -4,6 +4,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TbSeckillGoods  implements Serializable {
@@ -520,4 +521,19 @@ public class TbSeckillGoods  implements Serializable {
     public void setIntroduction(String introduction) {
         this.introduction = introduction == null ? null : introduction.trim();
     }
+
+      public  String  getDepartureTimeStr(){
+
+          return startTime != null
+                  ? new SimpleDateFormat("yyyy-MM-dd HH:mm").format(startTime)
+                  : "暂无秒杀开始日期";
+  }
+
+    public  String  getDepartureTimeStr2(){
+        return endTime != null
+                ? new SimpleDateFormat("yyyy-MM-dd HH:mm").format(endTime)
+                : "暂无秒杀结束日期";
+    }
+
+
 }
