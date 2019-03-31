@@ -26,14 +26,14 @@
     <script type="text/javascript" src="../js/controller/statisticController.js" ></script>
 </head>
 <body ng-app="pinyougou" ng-controller="statisticController" ng-init="findAll()">
-<div id="main" style="width: 800px;height: 600px;"></div>
+<div id="main" style="width: 1200px;height: 700px;"></div>
 <script type="text/javascript">
     var goodsTitle =[];
     // var goodsValues = [];
     $.get("../statistic/findAll.do",function (data) {
-        for(var i = 0; i < data.length; i++){
-            goodsTitle[i] = data[i].name;
-        }
+            for(var i = 0; i < data.length; i++){
+                goodsTitle[i] = data[i].name;
+            }
         // goodsValues = data;
         // 基于准备好的dom，初始化echarts实例
         var myChart = echarts.init(document.getElementById('main'));

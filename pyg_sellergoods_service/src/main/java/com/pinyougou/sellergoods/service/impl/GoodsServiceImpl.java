@@ -87,8 +87,6 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDesc.setGoodsId(tbGoods.getId()); //注意dao层新增后获取新增对象的id需要配置xml文件
 		goodsDescMapper.insert(goodsDesc);
 
-		int i = 1/0;
-
 		if("1".equals(tbGoods.getIsEnableSpec())){
 			//处理sku列表集合
 			List<TbItem> itemList = goods.getItemList();
@@ -233,6 +231,16 @@ public class GoodsServiceImpl implements GoodsService {
 			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
 			goods.setIsDelete("1");
 			goodsMapper.updateByPrimaryKey(goods);
+			//逻辑删除商品规格
+			TbItemExample example = new TbItemExample();
+			example.createCriteria().andGoodsIdEqualTo(id);
+			//根据商品id获取所有规格
+			List<TbItem> tbItems = itemMapper.selectByExample(example);
+			//遍历规格，更改状态为3
+			for (TbItem tbItem : tbItems) {
+				tbItem.setStatus("3");
+				itemMapper.updateByPrimaryKey(tbItem);
+			}
 		}		
 	}
 	
@@ -270,6 +278,24 @@ public class GoodsServiceImpl implements GoodsService {
 			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
 			goods.setAuditStatus(status);
 			goodsMapper.updateByPrimaryKey(goods);
+			//查询商品下的所有规格列表
+			TbItemExample example = new TbItemExample();
+			example.createCriteria().andGoodsIdEqualTo(goods.getId());
+			List<TbItem> tbItems = itemMapper.selectByExample(example);
+			//如果商品上架，将规格状态改为正常
+			if("5".equals(status)){
+				for (TbItem tbItem : tbItems) {
+					tbItem.setStatus("1");
+					itemMapper.updateByPrimaryKey(tbItem);
+				}
+			}
+			//如果商品下架，将商品规格改为下架2
+			if("6".equals(status)){
+				for (TbItem tbItem : tbItems) {
+					tbItem.setStatus("2");
+					itemMapper.updateByPrimaryKey(tbItem);
+				}
+			}
 		}
 	}
 

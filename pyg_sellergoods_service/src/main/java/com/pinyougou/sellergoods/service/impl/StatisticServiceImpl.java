@@ -20,7 +20,8 @@ public class StatisticServiceImpl implements StatisticService {
     @Override
     public List<TbItem> findAll(String sellerId) {
         TbItemExample example = new TbItemExample();
-        example.createCriteria().andSellerIdEqualTo(sellerId);
+        //添加条件，查询该商家的所有商品规格信息，并且已上架
+        example.createCriteria().andSellerIdEqualTo(sellerId).andStatusEqualTo("1");
         List<TbItem> tbItems = itemMapper.selectByExample(example);
         return tbItems;
     }
