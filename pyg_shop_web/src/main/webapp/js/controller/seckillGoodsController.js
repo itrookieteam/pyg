@@ -88,6 +88,11 @@ app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoo
         );
     }
 
+    $scope.aaa=function(){
+       document.getElementById("test1").value = "";
+        document.getElementById("test2").value = "";
+    }
+
 
 
      $scope.itemList = [];
@@ -125,11 +130,13 @@ app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoo
     $scope.status=['草稿','未审核','审核通过','审核未通过']
 
 
-  //  $scope.entity.tbSeckillGoods.startTime = [];
+   $scope.entity = {tbSeckillGoods :{}};
 	//日历插件1
     laydate.render({
         elem: '#test1',
         type:'datetime',
+        value: ""
+        ,isInitValue: false,
         done: function (value, date, endDate) {//控件选择完毕后的回调---点击日期、清空、现在、确定均会触发。    console.log(value); //得到日期生成的值，如：2017-08-18    console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}    console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。  }
             $scope.entity.tbSeckillGoods.startTime=value;
              alert(value)
@@ -148,9 +155,12 @@ app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoo
 
         }
     })
+
+
+
     //商家进行秒杀商品的提交的审核
     $scope.updateStatus = function (status) {
-        goodsService.updateStatus($scope.selectIds, status).success(
+        seckillGoodsService.updateStatus($scope.selectIds, status).success(
             function (response) {
                 if (response.success) {
                     //提交审核成功直接刷新页面即可

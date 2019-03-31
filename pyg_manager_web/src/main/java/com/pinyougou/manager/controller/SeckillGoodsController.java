@@ -103,7 +103,7 @@ public class SeckillGoodsController {
 	
 		/**
 	 * 查询+分页
-	 * @param brand
+	 * @param
 	 * @param page
 	 * @param rows
 	 * @return
@@ -112,5 +112,20 @@ public class SeckillGoodsController {
 	public PageResult search(@RequestBody TbSeckillGoods seckillGoods, int page, int rows  ){
 		return seckillGoodsService.findPage(seckillGoods, page, rows);		
 	}
-	
+
+
+
+
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] ids, String status) {
+		try {
+			seckillGoodsService.updateStatus(ids,status);
+			return new Result(true, "提交成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "提交失败");
+		}
+	}
+
+
 }

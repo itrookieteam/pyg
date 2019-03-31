@@ -26,7 +26,7 @@
     <script type="text/javascript" src="../js/controller/seckillGoodsController.js"></script>
 </head>
 <body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="seckillGoodsController"
-      ng-init="findgoodsList()">
+      ng-init="findgoodsList();searchEntity={status:1}">
 <!-- .box-body -->
 <div class="box-header with-border">
     <h3 class="box-title">管理</h3>
@@ -41,12 +41,9 @@
         <div class="pull-left">
             <div class="form-group form-inline">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
-                            data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建
-                    </button>
-                    <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
-                            class="fa fa-trash-o"></i> 删除
-                    </button>
+                    <button ng-click="updateStatus(2)" type="button" class="btn btn-default" title="审核通过" ><i class="fa fa-check"></i> 审核通过</button>
+                    <button ng-click="updateStatus(3)" type="button" class="btn btn-default" title="驳回" ><i class="fa fa-ban"></i> 驳回</button>
+                    <button ng-click="updateStatus(4)" type="button" class="btn btn-default" title="强制关闭" ><i class="fa fa-ban"></i> 强制关闭</button>
                     <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i
                             class="fa fa-refresh"></i> 刷新
                     </button>
@@ -66,7 +63,7 @@
                 <th class="" style="padding-right:0px">
                     <input id="selall" type="checkbox" class="icheckbox_square-blue">
                 </th>
-                <!--   <th class="sorting">spu ID</th>-->
+                <!-- <th class="sorting">spu ID</th>-->
                 <th class="sorting">标题</th>
                 <th class="sorting">商品图片</th>
                 <th class="sorting">原价格</th>
@@ -79,14 +76,12 @@
                 <th class="sorting">秒杀商品数</th>
                 <th class="sorting">剩余库存数</th>
                 <th class="sorting">描述</th>
-
-                <th class="text-center">操作</th>
             </tr>
             </thead>
             <tbody>
             <tr ng-repeat="entity in list">
                 <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
-                <!--<td>{{entity.goodsId}}</td>-->
+                <!--<td>{{entity.id}}</td>-->
                 <td>{{entity.title}}</td>
                 <td><img src="{{entity.smallPic}}" height="100px" width="100px"></td>
                 <td>{{entity.price}}</td>
@@ -103,12 +98,6 @@
                 <td>{{entity.num}}</td>
                 <td>{{entity.stockCount}}</td>
                 <td>{{entity.introduction}}</td>
-
-                <td class="text-center">
-                    <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal"
-                            ng-click="findOne(entity.id)">修改
-                    </button>
-                </td>
             </tr>
             </tbody>
         </table>
@@ -120,119 +109,6 @@
 </div>
 <!-- /.box-body -->
 
-<!-- 编辑窗口 -->
-<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 id="myModalLabel">编辑</h3>
-            </div>
-            <div class="modal-body">
-                <table class="table table-bordered table-striped" width="800px">
-                    <tr>
-
-                        <td>spu名称</td>
-
-                        <td><!--<input  class="form-control" ng-model="entity.goodsId" placeholder="spu ID" >-->
-
-                            <select class="form-control" ng-model="entity.tbItem.goodsId"
-                                    ng-options="good.id as good.goodsName for good in goodList"
-                                    placeholder="spu名称"></select>
-
-                        </td>
-
-                    </tr>
-                    <tr>
-
-                        <td>标题</td>
-
-                        <td><!--<input  class="form-control" ng-model="entity.itemId" placeholder="sku ID" ></td>-->
-                            <select class="form-control" ng-model="entity.tbItem.itemId"
-                                    ng-options="item.id as item.title for item in itemList"
-                                    placeholder="标题"></select>
-
-                    </tr>
-                    <tr>
-
-                        <td>商品图片</td>
-
-                       <!-- <td><input class="form-control" ng-model="entity.smallPic" placeholder="商品图片"></td>-->
-                        <td><img src="{{entity.smallPic}}" ng-model="entity.smallPic" height="100px" width="100px"></td>
-                    </tr>
-                    <tr>
-
-                        <td>原价格</td>
-
-                        <td><input class="form-control" ng-model="entity.price" placeholder="原价格"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>秒杀价格</td>
-
-                        <td><input class="form-control" ng-model="entity.costPrice" placeholder="秒杀价格"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>商家ID</td>
-
-                        <td><input class="form-control" ng-model="entity.sellerId" placeholder="商家ID"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>添加日期</td>
-
-                        <td><input class="form-control" ng-model="entity.createTime" placeholder="添加日期"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>开始时间</td>
-
-                        <td><input class="form-control" ng-model="entity.startTime" placeholder="开始时间"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>结束时间</td>
-
-                        <td><input class="form-control" ng-model="entity.endTime" placeholder="结束时间"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>秒杀商品数</td>
-
-                        <td><input class="form-control" ng-model="entity.num"  placeholder="秒杀商品数"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>剩余库存数</td>
-
-                        <td><input class="form-control" ng-model="entity.stockCount" placeholder="剩余库存数"></td>
-
-                    </tr>
-                    <tr>
-
-                        <td>描述</td>
-
-                        <td><input class="form-control" ng-model="entity.introduction" placeholder="描述"></td>
-
-                    </tr>
-
-                </table>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
-                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 </body>
 </html>

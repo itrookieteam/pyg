@@ -1,5 +1,5 @@
  //控制层 
-app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillGoodsService){	
+app.controller('seckillGoodsController' ,function($scope,$controller,seckillGoodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -76,5 +76,26 @@ app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillG
 			}			
 		);
 	}
-    
+
+
+
+    //商家进行秒杀商品的提交的审核
+    $scope.updateStatus = function (status) {
+        seckillGoodsService.updateStatus($scope.selectIds, status).success(
+            function (response) {
+                if (response.success) {
+                    //提交审核成功直接刷新页面即可
+                    $scope.reloadList();
+                } else {
+                    //显示错误的信息
+                    alert(response.message);
+                }
+
+            }
+        )
+
+    }
+
+
+    $scope.status=['草稿','未审核','审核通过','审核未通过']
 });	

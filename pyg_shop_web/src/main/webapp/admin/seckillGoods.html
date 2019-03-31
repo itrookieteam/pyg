@@ -18,8 +18,6 @@
     <script src="../plugins/angularjs/pagination.js"></script>
     <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
     <!-- 分页组件结束 -->
-
-   <!-- <link rel="stylesheet" href="../plugins/layui/css/layui.css" media="all">-->
     <script type="text/javascript" src="../js/base_pagination.js"></script>
     <script type="text/javascript" src="../js/service/goodsService.js"></script>
     <script type="text/javascript" src="../js/controller/baseController.js"></script>
@@ -44,7 +42,7 @@
             <div class="form-group form-inline">
                 <div class="btn-group">
                     <button type="button" class="btn btn-default" title="新建" data-toggle="modal"
-                            data-target="#editModal" ng-click="entity={};"><i class="fa fa-file-o"></i> 新建
+                            data-target="#editModal" ng-click="entity={tbSeckillGoods :{}};aaa()"><i class="fa fa-file-o"></i> 新建
                     </button>
                     <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i
                             class="fa fa-trash-o"></i> 删除
@@ -54,10 +52,6 @@
                             class="fa fa-refresh"></i> 刷新
                     </button>
                 </div>
-            </div>
-        </div>
-        <div class="box-tools pull-right">
-            <div class="has-feedback">
             </div>
         </div>
 
@@ -72,6 +66,13 @@
             </select>
                 商品名称：<input ng-model="searchEntity.goodsName">
                 <button class="btn btn-default" ng-click="reloadList()">查询</button>
+            </div>
+        </div>
+
+
+
+        <div class="box-tools pull-right">
+            <div class="has-feedback">
             </div>
         </div>
         <!--工具栏/-->
@@ -104,7 +105,7 @@
             <tbody>
             <tr ng-repeat="entity in list">
                 <td><input type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
-               <!-- <td>{{entity.id}}</td>-->
+                <td>{{entity.id}}</td>
                 <td>{{entity.title}}</td>
                 <td><img src="{{entity.smallPic}}" height="100px" width="100px"></td>
                 <td>{{entity.price}}</td>
@@ -207,14 +208,14 @@
                         <td>开始时间</td>
 
                       <!--  <td><input class="form-control" ng-model="entity.tbSeckillGoods.startTime" ></td>-->
-                        <td><input  class="form-control" id="test1" placeholder="开始时间"  ></td>
+                        <td><input  class="form-control" id="test1" placeholder="开始时间" value="" autocomplete="off" ></td>
                     </tr>
                     <tr>
 
                         <td>结束时间</td>
 
                        <!-- <td><input class="form-control" ng-model="entity.tbSeckillGoods.startTime"" placeholder="结束时间"></td>-->
-                        <td><input  class="form-control" id="test2" placeholder="结束时间" ></td>
+                        <td><input  class="form-control" id="test2" placeholder="结束时间" value="" autocomplete="off" ></td>
 
                     </tr>
 

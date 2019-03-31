@@ -33,7 +33,7 @@ app.service('seckillGoodsService',function($http){
 	//商家提交审核
     //商家对商品进行提交审核发送异步的请求
     this.updateStatus=function (ids,status) {
-        return $http.get('../goods/updateStatus.do?ids=' + ids + "&status=" + status);
+        return $http.get('../seckillGoods/updateStatus.do?ids=' + ids + "&status=" + status);
 
     }
 });
