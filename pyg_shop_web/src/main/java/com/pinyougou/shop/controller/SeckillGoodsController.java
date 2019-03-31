@@ -1,10 +1,16 @@
 package com.pinyougou.shop.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.pinyougou.pojo.TbGoods;
+import com.pinyougou.pojo.TbItem;
 import com.pinyougou.pojo.TbSeckillGoods;
 import com.pinyougou.seckill.service.SeckillGoodsService;
+import com.pinyougou.sellergoods.service.GoodsService;
+import com.pinyougou.sellergoods.service.TbItemService;
 import entity.PageResult;
 import entity.Result;
+import entity.SeckillGoods;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,7 +27,17 @@ public class SeckillGoodsController {
 
 	@Reference
 	private SeckillGoodsService seckillGoodsService;
-	
+
+
+
+	@Reference
+	private GoodsService goodsService;
+
+
+	@Reference
+	private TbItemService tbItemService;
+
+
 	/**
 	 * 返回全部列表
 	 * @return
@@ -30,8 +46,32 @@ public class SeckillGoodsController {
 	public List<TbSeckillGoods> findAll(){			
 		return seckillGoodsService.findAll();
 	}
-	
-	
+
+
+
+	//查询对应商品的信息
+	@RequestMapping("/findgoodsList")
+	public List<TbGoods> findgoodsList(){
+		//从安全框架获取对应id
+        String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return goodsService.findgoodsList(sellerId);
+	}
+
+	//根据商品id查询对应sku的信息
+	@RequestMapping("/findItemList")
+	public List findItemList(Long goodsId){
+		return tbItemService.findItemList(goodsId);
+	}
+
+	//根据sku的goodsId查询对应sku具体的信息
+	@RequestMapping("/findByParentId")
+	public TbItem findByParentId(Long goodsId){
+		return tbItemService.findByParentId(goodsId);
+	}
+
+
+
+
 	/**
 	 * 返回全部列表
 	 * @return
@@ -47,7 +87,7 @@ public class SeckillGoodsController {
 	 * @return
 	 */
 	@RequestMapping("/add")
-	public Result add(@RequestBody TbSeckillGoods seckillGoods){
+	public Result add(@RequestBody SeckillGoods seckillGoods){
 		try {
 			seckillGoodsService.add(seckillGoods);
 			return new Result(true, "增加成功");
@@ -101,7 +141,7 @@ public class SeckillGoodsController {
 	
 		/**
 	 * 查询+分页
-	 * @param brand
+	 * @param
 	 * @param page
 	 * @param rows
 	 * @return
@@ -109,6 +149,18 @@ public class SeckillGoodsController {
 	@RequestMapping("/search")
 	public PageResult search(@RequestBody TbSeckillGoods seckillGoods, int page, int rows  ){
 		return seckillGoodsService.findPage(seckillGoods, page, rows);		
+	}
+
+
+	@RequestMapping("/updateStatus")
+	public Result updateStatus(Long[] ids, String status) {
+		try {
+			seckillGoodsService.updateStatus(ids,status);
+			return new Result(true, "提交成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new Result(false, "提交失败");
+		}
 	}
 	
 }

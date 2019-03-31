@@ -1,5 +1,7 @@
 package com.pinyougou.pojo;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -99,6 +101,7 @@ public class TbSeckillGoods  implements Serializable {
      *
      * @mbggenerated Sat Mar 02 16:57:17 CST 2019
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date startTime;
 
     /**
@@ -107,6 +110,7 @@ public class TbSeckillGoods  implements Serializable {
      *
      * @mbggenerated Sat Mar 02 16:57:17 CST 2019
      */
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
     private Date endTime;
 
     /**

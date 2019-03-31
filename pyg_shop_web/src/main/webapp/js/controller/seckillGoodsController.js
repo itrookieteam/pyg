@@ -1,8 +1,8 @@
  //控制层 
-app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillGoodsService){	
+app.controller('seckillGoodsController' ,function($scope,$controller ,seckillGoodsService,goodsService){
 	
 	$controller('baseController',{$scope:$scope});//继承
-	
+    //$scope.entity1 = {};
     //读取列表数据绑定到表单中  
 	$scope.findAll=function(){
 		seckillGoodsService.findAll().success(
@@ -23,9 +23,11 @@ app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillG
 	}
 	
 	//查询实体 
-	$scope.findOne=function(id){				
+	$scope.findOne=function(id){
+        alert(id);
 		seckillGoodsService.findOne(id).success(
 			function(response){
+                alert(response);
 				$scope.entity= response;					
 			}
 		);				
@@ -35,9 +37,9 @@ app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillG
 	$scope.save=function(){				
 		var serviceObject;//服务层对象  				
 		if($scope.entity.id!=null){//如果有ID
-			serviceObject=seckillGoodsService.update( $scope.entity ); //修改  
+			serviceObject=seckillGoodsService.update( $scope.entity); //修改
 		}else{
-			serviceObject=seckillGoodsService.add( $scope.entity  );//增加 
+			serviceObject=seckillGoodsService.add( $scope.entity );//增加
 		}				
 		serviceObject.success(
 			function(response){
@@ -76,5 +78,91 @@ app.controller('seckillGoodsController' ,function($scope,$controller   ,seckillG
 			}			
 		);
 	}
-    
-});	
+
+    //查询对应商品的信息
+    $scope.findgoodsList=function(){
+        goodsService.findgoodsList().success(
+            function(response){
+                $scope.goodList=response;
+            }
+        );
+    }
+
+
+
+     $scope.itemList = [];
+    //使用观察的方法做查询对应的商品表的详情表的信息sku
+    $scope.$watch('entity.tbGoods.id',function(newValue,oldValue){
+        //根据选择的一级分类id查询二级分类列表数据
+        if (newValue!=null) {
+            goodsService.findItemList(newValue).success(
+                function(response){
+                    $scope.itemList = response;
+                }
+            )
+        }
+    })
+
+
+      $scope.entity = [];
+    //使用观察的方法做查询对应的商品表的详情表的信息sku
+    $scope.$watch('entity.tbItem.id',function(newValue,oldValue){
+        if (newValue!=null) {
+        	goodsService.findByParentId(newValue).success(
+            function(response){
+              //  alert(response);
+                $scope.entity.tbItem = response;
+                //  $scope.entity.itemId = $scope.entity1.itemId;
+
+            }
+        )
+        }
+        //根据选择的一级分类id查询二级分类列表数据
+
+    })
+
+
+    $scope.status=['草稿','未审核','审核通过','审核未通过']
+
+
+  //  $scope.entity.tbSeckillGoods.startTime = [];
+	//日历插件1
+    laydate.render({
+        elem: '#test1',
+        type:'datetime',
+        done: function (value, date, endDate) {//控件选择完毕后的回调---点击日期、清空、现在、确定均会触发。    console.log(value); //得到日期生成的值，如：2017-08-18    console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}    console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。  }
+            $scope.entity.tbSeckillGoods.startTime=value;
+             alert(value)
+        }
+    })
+
+
+
+    //日历插件1
+    laydate.render({
+        elem: '#test2',
+        type:'datetime',
+        done: function (value, date, endDate) {//控件选择完毕后的回调---点击日期、清空、现在、确定均会触发。    console.log(value); //得到日期生成的值，如：2017-08-18    console.log(date); //得到日期时间对象：{year: 2017, month: 8, date: 18, hours: 0, minutes: 0, seconds: 0}    console.log(endDate); //得结束的日期时间对象，开启范围选择（range: true）才会返回。对象成员同上。  }
+            $scope.entity.tbSeckillGoods.endTime=value;
+            alert(value)
+
+        }
+    })
+    //商家进行秒杀商品的提交的审核
+    $scope.updateStatus = function (status) {
+        goodsService.updateStatus($scope.selectIds, status).success(
+            function (response) {
+                if (response.success) {
+                    //提交审核成功直接刷新页面即可
+                    $scope.reloadList();
+                } else {
+                    //显示错误的信息
+                    alert(response.message);
+                }
+
+            }
+        )
+
+    }
+
+});

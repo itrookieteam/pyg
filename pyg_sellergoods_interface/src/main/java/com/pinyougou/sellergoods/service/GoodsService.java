@@ -65,4 +65,8 @@ public interface GoodsService {
 	 * @param status
 	 */
 	public void updateStatus(Long[] ids,String status);
+
+
+	//查询所有的商品的信息
+	public List<TbGoods> findgoodsList(String sellerId);
 }

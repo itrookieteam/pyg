@@ -46,7 +46,14 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private TbSellerMapper sellerMapper;
 
-	
+
+
+
+	@Autowired
+	private TbGoodsMapper tbGoodsMapper;
+
+
+
 	/**
 	 * 查询全部
 	 */
@@ -265,5 +272,17 @@ public class GoodsServiceImpl implements GoodsService {
 			goodsMapper.updateByPrimaryKey(goods);
 		}
 	}
+
+
+	// 根据商家查询所有商品的信息
+	@Override
+	public List<TbGoods> findgoodsList(String sellerId) {
+		TbGoodsExample example =  new TbGoodsExample();
+        example.createCriteria().andSellerIdEqualTo(sellerId);
+		List<TbGoods> tbGoods = tbGoodsMapper.selectByExample(example);
+		return tbGoods;
+	}
+
+
 
 }
