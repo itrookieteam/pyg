@@ -2,6 +2,8 @@ package com.pinyougou.sellergoods.service;
 import java.util.List;
 import com.pinyougou.pojo.TbOrderItem;
 
+
+import entity.OrderDesc;
 import entity.PageResult;
 /**
  * 服务层接口
@@ -57,5 +59,7 @@ public interface OrderItemService {
 	 * @return
 	 */
 	public PageResult findPage(TbOrderItem orderItem, int pageNum, int pageSize);
-	
+
+	//通过sellerId查询处订单信息
+	public List<OrderDesc> findBySellerId(String sellerId);
 }
