@@ -27,52 +27,7 @@
 </head>
 <body ng-app="pinyougou" ng-controller="statisticController" ng-init="findAll()">
 <div id="main" style="width: 1200px;height: 700px;"></div>
-<script type="text/javascript">
-    var goodsTitle =[];
-    // var goodsValues = [];
-    $.get("../statistic/findAll.do",function (data) {
-            for(var i = 0; i < data.length; i++){
-                goodsTitle[i] = data[i].name;
-            }
-        // goodsValues = data;
-        // 基于准备好的dom，初始化echarts实例
-        var myChart = echarts.init(document.getElementById('main'));
-        option = {
-            title : {
-                text: '商品库存数量',
-                // subtext: '纯属虚构',
-                x:'center'
-            },
-            tooltip : {
-                trigger: 'item',
-                formatter: "{a} <br/>{b} : {c} ({d}%)"
-            },
-            legend: {
-                orient: 'vertical',
-                left: 'left',
-                data:goodsTitle
-            },
-            series : [
-                {
-                    name: '商品库存',
-                    type: 'pie',
-                    radius : '55%',
-                    center: ['50%', '60%'],
-                    data:data,
-                    itemStyle: {
-                        emphasis: {
-                            shadowBlur: 10,
-                            shadowOffsetX: 0,
-                            shadowColor: 'rgba(0, 0, 0, 0.5)'
-                        }
-                    }
-                }
-            ]
-        };
-        // 使用刚指定的配置项和数据显示图表。
-        myChart.setOption(option);
-    });
-</script>
+
 
 <!--工具栏/-->
     <!--数据列表-->
@@ -107,13 +62,46 @@
                 <!--</span>-->
             <!--</td>-->
             <td class="text-center">
-                <a href="goods_edit.html#?id={{entity.goodsId}}" type="button" class="btn bg-olive btn-xs">修改</a>
+                <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)" >修改</button>
             </td>
         </tr>
         </tbody>
     </table>
     <!--数据列表/-->
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">编辑</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped"  width="800px">
+                    <tr>
 
+                        <td>商品名称</td>
+
+                        <td><input  class="form-control" ng-model="entity.title" placeholder="商品名称" ></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>库存数量</td>
+
+                        <td><input  class="form-control" ng-model="entity.num" placeholder="库存数量" ></td>
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>
