@@ -1,18 +1,23 @@
 package com.pinyougou.cart.controller;
 
 import com.alibaba.dubbo.config.annotation.Reference;
+import com.alibaba.fastjson.JSON;
 import com.pinyougou.cart.service.CartService;
+import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import entity.Cart;
 import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.json.MappingJackson2JsonView;
 import util.CookieUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,6 +34,15 @@ public class CartController {
     @Autowired
     private HttpServletResponse response;
 
+
+
+    @RequestMapping( "/findCartList")
+    public List<Cart> findCartList(@RequestBody CartVo vo){
+        List<Cart> cartList = vo.getCartList();
+        return cartList;
+    }
+
+
     //从cookie中获取唯一的key值
     public String getUuid(){
         String uuid = CookieUtil.getCookieValue(request, "uuid", "utf-8");
@@ -42,19 +56,52 @@ public class CartController {
 
     /**
      * 将商品添加购物车
-     * @param itemId
-     * @param num
-     * @return
      */
     @RequestMapping("/addItemToCartList")
+    //参数一，远程访问的地址,参数二，当需要操作cookie需要设置
+    /*@CrossOrigin(origins="http://localhost:9105",allowCredentials="true")*/
+    public Result addItemToCartList(@RequestBody CartVo vo){
+        try {
+            String uuid = getUuid();
+            String loginName = SecurityContextHolder.getContext().getAuthentication().getName();
+
+            if(!"anonymousUser".equals(loginName)){  //登录后的逻辑
+                uuid = loginName; //uuid变成登录后的用户名id
+            }
+
+
+            List<Cart> cartList = vo.getCartList();
+
+            if (cartList==null){
+                cartList=new ArrayList<>();
+            }
+            Long itemId = vo.getItemId();
+            Integer num = vo.getNum();
+            //商品添加购物车
+            cartList = cartService.addTbItemToCartList(cartList, itemId, num);
+
+            System.out.println(cartList);
+            System.out.println(cartList.toString());
+            System.out.println(JSON.toJSONString(cartList));
+         /*   //将添加好商品的购物车存到redis中
+            cartService.setCartListByUserId(uuid, cartList);*/
+
+            return new Result(true, JSON.toJSONString(cartList));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Result(false, "添加购物车失败!!!");
+        }
+    }
+
+    /*@RequestMapping("/addItemToCartList")
     //参数一，远程访问的地址,参数二，当需要操作cookie需要设置
     @CrossOrigin(origins="http://localhost:9105",allowCredentials="true")
     public Result addItemToCartList(Long itemId,Integer num){
 
-       /* //解决方法一：http://localhost:9109也可设置为*，但是*号不能用cookie,允许访问的域
+       *//* //解决方法一：http://localhost:9109也可设置为*，但是*号不能用cookie,允许访问的域
         response.setHeader("Access-Control-Allow-Origin", "http://localhost:9105");
         //----如果用了cookie信息-----，必须加后面这句话，如果不用cookie可以不加这句话
-        response.setHeader("Access-Control-Allow-Credentials", "true");*/
+        response.setHeader("Access-Control-Allow-Credentials", "true");*//*
 
         try {
             String uuid = getUuid();
@@ -79,8 +126,18 @@ public class CartController {
             e.printStackTrace();
             return new Result(false, "添加购物车失败!!!");
         }
-    }
+    }*/
 
+
+
+
+
+
+
+    /**
+     * 购物车页面加载直接走这个方法
+     * @return
+     */
     @RequestMapping("/findCartListFromRedis")
     public List<Cart> findCartListFromRedis(){
         String uuid = getUuid(); //获取唯一的key值

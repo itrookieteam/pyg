@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-/*大幅度进口量*/
 @Service
 public class CartServcieImpl implements CartService {
 
@@ -93,9 +92,11 @@ public class CartServcieImpl implements CartService {
      */
     public Cart findCartFromCartList(List<Cart> cartList,String sellerId){
         //循环一遍购物车
-        for (Cart cart : cartList) {
-            if(sellerId.equals(cart.getSellerId())){
-                return cart;
+        if (cartList!=null) {
+            for (Cart cart : cartList) {
+                if (sellerId.equals(cart.getSellerId())) {
+                    return cart;
+                }
             }
         }
         return null;
@@ -110,6 +111,12 @@ public class CartServcieImpl implements CartService {
         return null;
     }
 
+
+    /**
+     * 先从redis中获取购物车
+     * @param key
+     * @return
+     */
     @Override
     public List<Cart> getCartListByUserId(String key) {
         List<Cart> cartList = (List<Cart>) redisTemplate.boundHashOps("cartList").get(key);

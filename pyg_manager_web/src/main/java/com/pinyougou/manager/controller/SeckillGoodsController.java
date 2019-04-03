@@ -65,7 +65,7 @@ public class SeckillGoodsController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public Result update(@RequestBody TbSeckillGoods seckillGoods){
+	public Result update(@RequestBody SeckillGoods seckillGoods){
 		try {
 			seckillGoodsService.update(seckillGoods);
 			return new Result(true, "修改成功");

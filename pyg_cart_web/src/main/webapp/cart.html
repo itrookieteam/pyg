@@ -16,9 +16,11 @@
 	<script type="text/javascript" src="js/service/addressService.js">  </script>
 	<script type="text/javascript" src="js/service/orderService.js">  </script>
 	<script type="text/javascript" src="js/controller/cartController.js">  </script>
+
 </head>
 
-<body ng-app="pinyougou" ng-controller="cartController" ng-init="findCartListFromRedis()">
+<body ng-app="pinyougou" ng-controller="cartController" ng-init="initObject();">
+
 	<!--head-->
 	<div class="top">
 		<div class="py-container">
@@ -90,13 +92,13 @@
 								
 								<li class="yui3-u-1-8"><span class="price">{{orderItem.price}}</span></li>
 								<li class="yui3-u-1-8">
-									<a ng-click="addItemToCartList(orderItem.itemId,-1)" href="javascript:void(0)" class="increment mins">-</a>
+									<a ng-click="addOrderItemToCart(orderItem.itemId,-1)" href="javascript:void(0)" class="increment mins">-</a>
 									<input ng-model="orderItem.num" autocomplete="off" type="text" value="1" minnum="1" class="itxt" />
-									<a ng-click="addItemToCartList(orderItem.itemId,1)" href="javascript:void(0)" class="increment plus">+</a>
+									<a ng-click="addOrderItemToCart(orderItem.itemId,1)" href="javascript:void(0)" class="increment plus">+</a>
 								</li>
 								<li class="yui3-u-1-8"><span class="sum">{{orderItem.totalFee}}</span></li>
 								<li class="yui3-u-1-8">
-									<a ng-click="addItemToCartList(orderItem.itemId,-orderItem.num)" href="#none">删除</a><br />
+									<a ng-click="addItemToCart(orderItem.itemId,-orderItem.num)" href="#none">删除</a><br />
 									<a href="#none">移到我的关注</a>
 								</li>
 							</ul>
@@ -115,9 +117,9 @@
 					<a href="#none">清除下柜商品</a>
 				</div>
 				<div class="toolbar">
-					<div class="chosed">已选择<span>{{totalNum}}</span>件商品</div>
+					<div class="chosed">已选择<span>{{totalValue.totalNum}}</span>件商品</div>
 					<div class="sumprice">
-						<span><em>总价（不含运费） ：</em><i class="summoney">¥{{totalMoney}}</i></span>
+						<span><em>总价（不含运费） ：</em><i class="summoney">¥{{totalValue.totalMoney}}</i></span>
 						<span><em>已节省：</em><i>-¥0.00</i></span>
 					</div>
 					<div class="sumbtn">

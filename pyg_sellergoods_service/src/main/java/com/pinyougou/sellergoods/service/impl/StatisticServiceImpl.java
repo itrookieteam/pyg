@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 
+import entity.Result;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.pinyougou.mapper.TbItemMapper;
@@ -24,5 +25,22 @@ public class StatisticServiceImpl implements StatisticService {
         example.createCriteria().andSellerIdEqualTo(sellerId).andStatusEqualTo("1");
         List<TbItem> tbItems = itemMapper.selectByExample(example);
         return tbItems;
+    }
+
+    @Override
+    public TbItem findOne(Long id) {
+        return itemMapper.selectByPrimaryKey(id);
+    }
+
+    @Override
+    public Result updateItem(TbItem tbItem) {
+
+        try{
+            itemMapper.updateByPrimaryKey(tbItem);
+            return new Result(true,"修改库存成功！");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Result(false,"修改库存失败！");
+        }
     }
 }
