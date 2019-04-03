@@ -62,4 +62,6 @@ public interface OrderItemService {
 
 	//通过sellerId查询订单信息
 	public List<OrderDesc> findBySellerId(String sellerId);
+   //模糊查询1
+    public List<OrderDesc> selectByRecord(OrderDesc orderDesc);
 }
