@@ -46,7 +46,6 @@ public class OrderItemServiceImpl implements OrderItemService {
 	 */
 	@Override
 	public PageResult findPage(int pageNum, int pageSize) {
-
 		PageHelper.startPage(pageNum, pageSize);		
 		Page<TbOrderItem> page=   (Page<TbOrderItem>) orderItemMapper.selectByExample(null);
 		return new PageResult(page.getTotal(), page.getResult());
@@ -123,15 +122,14 @@ public class OrderItemServiceImpl implements OrderItemService {
 		tbOrderExample.createCriteria().andSellerIdEqualTo(sellerId);
 		List<TbOrder> orders = tbOrderMapper.selectByExample(tbOrderExample);
 
-
 		for (TbOrder tbOrder : orders) {
 			OrderDesc orderDesc = new OrderDesc();
 			orderDesc.setSourceType(tbOrder.getSourceType());
-			orderDesc.setCreateTtime(tbOrder.getCreateTime());
+			orderDesc.setCreateTime(tbOrder.getCreateTime());
 			orderDesc.setStatus(tbOrder.getStatus());
 			//根据订单id查询订单分类表数据
 			TbOrderItemExample tbOrderItemExample = new TbOrderItemExample();
-			tbOrderItemExample.createCriteria().andSellerIdEqualTo(sellerId);
+			tbOrderItemExample.createCriteria().andOrderIdEqualTo(tbOrder.getOrderId());
 			List<TbOrderItem> tbOrderItems = tbOrderItemMapper.selectByExample(tbOrderItemExample);
 			for (TbOrderItem tbOrderItem : tbOrderItems) {
 				orderDesc.setPrice(tbOrderItem.getPrice());
@@ -141,11 +139,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 				TbGoods tbGoods = tbGoodsMapper.selectByPrimaryKey(tbOrderItem.getGoodsId());
 				orderDesc.setGoodsName(tbGoods.getGoodsName());
 				orderDescs.add(orderDesc);
-
 			}
 
 		}
-
 		return orderDescs;
 	}
 }

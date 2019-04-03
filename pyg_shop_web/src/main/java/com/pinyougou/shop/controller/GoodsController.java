@@ -4,7 +4,7 @@ import java.util.List;
 import entity.Goods;
 import org.apache.activemq.command.ActiveMQQueue;
 import org.apache.activemq.command.ActiveMQTopic;
-import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.jms.core.JmsTemplate;
 import org.springframework.jms.core.MessageCreator;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -40,20 +40,20 @@ public class GoodsController {
 	@Reference
 	private ItemPageService itemPageService;*/
 
-	@Autowired
-    private JmsTemplate jmsTemplate;
+	/*@Reference
+    private JmsTemplate jmsTemplate;*/
 
-	@Autowired
+	/*@Reference
 	private ActiveMQQueue solrCreateDestination; //导入solr库
 
-	@Autowired
+	@Reference
 	private ActiveMQQueue solrDeleteDestination; //删除solr库
 
-	@Autowired
+	@Reference
 	private ActiveMQTopic pageCreateDestination; //生成页面
 
-	@Autowired
-	private ActiveMQTopic pageDeleteDestination; //删除页面
+	@Reference
+	private ActiveMQTopic pageDeleteDestination; //删除页面*/
 	
 	/**
 	 * 返回全部列表
@@ -165,7 +165,7 @@ public class GoodsController {
 		//商品上下架逻辑
 		if("5".equals(status)){//ids是goods的多个id
 
-			//itemSearchService.importItemToSolr(ids);
+			/*//itemSearchService.importItemToSolr(ids);
 			//发送导入solr库消息
 			jmsTemplate.send(solrCreateDestination, new MessageCreator() {
 				@Override
@@ -175,20 +175,20 @@ public class GoodsController {
 			});
 
 			//生成页面
-			/*for (Long id : ids) {
+			*//*for (Long id : ids) {
 				itemPageService.createHtml(id);
-			}*/
+			}*//*
 			// 发送创建页面消息
 			jmsTemplate.send(pageCreateDestination, new MessageCreator() {
 				@Override
 				public Message createMessage(Session session) throws JMSException {
 					return session.createObjectMessage(ids);
 				}
-			});
+			});*/
 
 		}
 		if("6".equals(status)){
-			//solr库删除逻辑
+			/*//solr库删除逻辑
 			//itemSearchService.removeItemFromSolr(ids);
 			//发消息删除solr库
 			jmsTemplate.send(solrDeleteDestination, new MessageCreator() {
@@ -206,7 +206,7 @@ public class GoodsController {
 				public Message createMessage(Session session) throws JMSException {
 					return session.createObjectMessage(ids);
 				}
-			});
+			});*/
 		}
 
 		try {
