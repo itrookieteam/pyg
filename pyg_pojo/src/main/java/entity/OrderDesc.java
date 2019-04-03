@@ -24,7 +24,7 @@ public class OrderDesc implements Serializable {
     private Integer num;//商品数量
     private BigDecimal totalFee;//商品总金额
     private String sourceType;//订单来源
-    private Date createTtime;//创建时间
+    private Date createTime;//创建时间
     private String status;//状态
 
     public String getGoodsName() {
@@ -67,12 +67,12 @@ public class OrderDesc implements Serializable {
         this.sourceType = sourceType;
     }
 
-    public Date getCreateTtime() {
-        return createTtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateTtime(Date createTtime) {
-        this.createTtime = createTtime;
+    public void setCreateTime(Date createTtime) {
+        this.createTime = createTtime;
     }
 
     public String getStatus() {
