@@ -125,9 +125,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 		TbOrderExample tbOrderExample = new TbOrderExample();
 		tbOrderExample.createCriteria().andSellerIdEqualTo(sellerId);
 		List<TbOrder> orders = tbOrderMapper.selectByExample(tbOrderExample);
-		OrderDesc orderDesc = new OrderDesc();
-		for (TbOrder tbOrder : orders) {
 
+		for (TbOrder tbOrder : orders) {
+			OrderDesc orderDesc = new OrderDesc();
 			orderDesc.setSourceType(tbOrder.getSourceType());
 			orderDesc.setCreateTime(tbOrder.getCreateTime());
 			orderDesc.setStatus(tbOrder.getStatus());
