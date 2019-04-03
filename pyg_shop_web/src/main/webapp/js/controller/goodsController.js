@@ -57,13 +57,14 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 		}				
 		serviceObject.success(
 			function(response){
-				/*if(response.success){
+				if(response.success){
 					//重新查询 
-		        	$scope.reloadList();//重新加载
+                    // $scope.reloadList();//重新加载
+                    location.href="goods.html"
 				}else{
 					alert(response.message);
-				}*/
-                alert(response.message);
+				}
+                // alert(response.message);
 			}		
 		);				
 	}
@@ -83,7 +84,8 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 	}
 	
 	$scope.searchEntity={};//定义搜索对象 
-	
+    //商品分类
+    $scope.itemCatList=[];
 	//搜索
 	$scope.search=function(page,rows){			
 		goodsService.search(page,rows,$scope.searchEntity).success(
@@ -92,7 +94,16 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
 				$scope.paginationConf.totalItems=response.total;//更新总记录数
 			}			
 		);
-	}
+        //获取所有分类信息
+        itemCatService.findAll().success(
+            function (response) {
+                for(var i = 0; i < response.length; i++){
+                    //遍历分类对象，将分类id作为索引，存入分类的name
+                    $scope.itemCatList[response[i].id] = response[i].name;
+                }
+            }
+        );
+	};
 
 	//一级分类列表数据查询
 	$scope.findItemCatList = function () {
@@ -268,4 +279,6 @@ app.controller('goodsController' ,function($scope,$controller   ,goodsService,it
             }
         }
     }
+
+    $scope.goodsStatus=['草稿','已提交','已审核','驳回','强制关闭','上架','下架'];
 });	

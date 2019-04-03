@@ -116,4 +116,25 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
             }
 		)
     }
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#importExcel' //绑定元素
+            ,url: '../seller/importExcel.do' //上传接口
+            ,acceptMime:'application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'//文件的mime类型
+            ,accept:'file'//文件类型
+            ,done: function(res){
+                //上传完毕回调
+                alert(res.message);
+                $scope.reloadList()//重新加载
+            }
+            ,error: function(){
+                //请求异常回调
+                alert("网络异常！");
+            }
+        });
+    });
 });	

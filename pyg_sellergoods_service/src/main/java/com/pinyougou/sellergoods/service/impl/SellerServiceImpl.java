@@ -1,5 +1,6 @@
 package com.pinyougou.sellergoods.service.impl;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -253,6 +254,29 @@ public class SellerServiceImpl implements SellerService {
 		OutputStream os = new FileOutputStream("D:\\img\\测试代码.xls");
 		hssfWorkbook.write(os);
 		os.close();
+	}
+
+	/**
+	 * 导入Excel
+	 * @throws Exception
+	 */
+	@Override
+	public void inportExcel(List<TbSeller> sellerList) throws Exception {
+
+		//获取所有商家ID
+		List<TbSeller> tbSellers = sellerMapper.selectByExample(null);
+		ArrayList<String> strings = new ArrayList<>();
+		for (TbSeller tbSeller : tbSellers) {
+			strings.add(tbSeller.getSellerId());
+		}
+
+		for (TbSeller seller : sellerList) {
+			if(strings.contains(seller.getSellerId())){//包含
+				sellerMapper.updateByPrimaryKey(seller);
+			}else{
+				sellerMapper.insert(seller);
+			}
+		}
 	}
 
 
