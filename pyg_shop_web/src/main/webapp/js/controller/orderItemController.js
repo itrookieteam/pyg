@@ -84,6 +84,14 @@ app.controller('orderItemController' ,function($scope,$controller   ,orderItemSe
 			}
 		);
 	}
+	//订单列表mohu 查询
+	$scope.selectByRecord=function () {
+		orderItemService.selectByRecord($scope.entity).success(
+			function (response) {
+				$scope.list= response;
+			}
+		);
+	}
 //日历插件
 	laydate.render({
 		elem: '#test',

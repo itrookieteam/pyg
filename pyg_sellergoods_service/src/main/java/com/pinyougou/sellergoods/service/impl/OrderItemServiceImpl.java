@@ -1,11 +1,14 @@
 package com.pinyougou.sellergoods.service.impl;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import com.pinyougou.mapper.TbGoodsMapper;
 import com.pinyougou.mapper.TbOrderMapper;
 import com.pinyougou.pojo.*;
 import entity.OrderDesc;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import com.alibaba.dubbo.config.annotation.Service;
 import com.github.pagehelper.Page;
@@ -15,6 +18,7 @@ import com.pinyougou.pojo.TbOrderItemExample.Criteria;
 import com.pinyougou.sellergoods.service.OrderItemService;
 
 import entity.PageResult;
+import util.DateUtils;
 
 
 /**
@@ -121,9 +125,9 @@ public class OrderItemServiceImpl implements OrderItemService {
 		TbOrderExample tbOrderExample = new TbOrderExample();
 		tbOrderExample.createCriteria().andSellerIdEqualTo(sellerId);
 		List<TbOrder> orders = tbOrderMapper.selectByExample(tbOrderExample);
-
+		OrderDesc orderDesc = new OrderDesc();
 		for (TbOrder tbOrder : orders) {
-			OrderDesc orderDesc = new OrderDesc();
+
 			orderDesc.setSourceType(tbOrder.getSourceType());
 			orderDesc.setCreateTime(tbOrder.getCreateTime());
 			orderDesc.setStatus(tbOrder.getStatus());
@@ -140,8 +144,42 @@ public class OrderItemServiceImpl implements OrderItemService {
 				orderDesc.setGoodsName(tbGoods.getGoodsName());
 				orderDescs.add(orderDesc);
 			}
-
 		}
 		return orderDescs;
+
+
+	}
+  //模糊查询
+	@Override
+	public List<OrderDesc> selectByRecord(OrderDesc orderDesc) {
+		//再根据状态和日期查询
+		try {
+			if(orderDesc.getCreateTime()!=null&&orderDesc.getCheckType()!=""&&orderDesc.getCheckType()!=null) {
+				if ("2".equals(orderDesc.getCheckType())) {
+					Date[] dates = DateUtils.getWeekStartAndEndDate(orderDesc.getCreateTime());
+					String beginDate=DateUtils.formatDateToStr(dates[0]);
+					String endDate=DateUtils.formatDateToStr(dates[1]);
+					orderDesc.setBeginDate(beginDate);
+					orderDesc.setEndDate(endDate);
+				}
+				if ("3".equals(orderDesc.getCheckType())) {
+					Date[] dates = DateUtils.getMonthStartAndEndDate(orderDesc.getCreateTime());
+					String beginDate=DateUtils.formatDateToStr(dates[0]);
+					String endDate=DateUtils.formatDateToStr(dates[1]);
+					orderDesc.setBeginDate(beginDate);
+					orderDesc.setEndDate(endDate);
+				}
+				if ("1".equals(orderDesc.getCheckType())) {
+					String[] pointStr = DateUtils.getDayStartAndEndTimePointStr(orderDesc.getCreateTime());
+					orderDesc.setBeginDate(pointStr[0]);
+					orderDesc.setEndDate(pointStr[1]);
+				}
+			}
+			List<OrderDesc> list = tbOrderItemMapper.selectByRecord(orderDesc);
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 }

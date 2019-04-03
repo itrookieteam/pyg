@@ -18,14 +18,41 @@ import java.util.List;
  */
 
 public class OrderDesc implements Serializable {
-
+    private String sellerId;//Shangpin id
     private String goodsName;//商品名称
     private BigDecimal price;//商品价格
     private Integer num;//商品数量
     private BigDecimal totalFee;//商品总金额
     private String sourceType;//订单来源
-    private Date createTtime;//创建时间
+    private Date createTime;//创建时间
     private String status;//状态
+    private String checkType;//选择类型
+    private String beginDate;//开始时间
+    private String endDate;
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getCheckType() {
+        return checkType;
+    }
+
+    public void setCheckType(String checkType) {
+        this.checkType = checkType;
+    }
+
+    public String getSellerId() {
+        return sellerId;
+    }
+
+    public void setSellerId(String sellerId) {
+        this.sellerId = sellerId;
+    }
 
     public String getGoodsName() {
         return goodsName;
@@ -67,12 +94,12 @@ public class OrderDesc implements Serializable {
         this.sourceType = sourceType;
     }
 
-    public Date getCreateTtime() {
-        return createTtime;
+    public Date getCreateTime() {
+        return createTime;
     }
 
-    public void setCreateTtime(Date createTtime) {
-        this.createTtime = createTtime;
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
     }
 
     public String getStatus() {
@@ -81,5 +108,13 @@ public class OrderDesc implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
     }
 }

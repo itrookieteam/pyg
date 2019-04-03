@@ -118,6 +118,13 @@ public class OrderItemController {
 		//从安全框架中获取商家id
 		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
 		return orderItemService.findBySellerId(sellerId);
+	}
 
+	@RequestMapping("/selectByRecord")
+	public List<OrderDesc> selectByRecord(@RequestBody OrderDesc orderDesc){
+		String sellerName = SecurityContextHolder.getContext().getAuthentication().getName();
+		orderDesc.setSellerId(sellerName);
+		List<OrderDesc> list = orderItemService.selectByRecord(orderDesc);
+		return list;
 	}
 }
