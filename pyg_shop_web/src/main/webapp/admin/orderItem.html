@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>管理</title>
+    <title>订单管理</title>
     <meta content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" name="viewport">
     <link rel="stylesheet" href="../plugins/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="../plugins/adminLTE/css/AdminLTE.css">
@@ -11,8 +11,8 @@
     <link rel="stylesheet" href="../css/style.css">
 	<script src="../plugins/jQuery/jquery-2.2.3.min.js"></script>
     <script src="../plugins/bootstrap/js/bootstrap.min.js"></script>
-    
-    <script type="text/javascript" src="../plugins/angularjs/angular.min.js">  </script>
+
+    <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
     <!-- 分页组件开始 -->
 	<script src="../plugins/angularjs/pagination.js"></script>
 	<link rel="stylesheet" href="../plugins/angularjs/pagination.css">
@@ -23,12 +23,12 @@
     <script type="text/javascript" src="../js/service/orderItemService.js">  </script>
     <script type="text/javascript" src="../js/controller/baseController.js">  </script>
     <script type="text/javascript" src="../js/controller/orderItemController.js">  </script>
-    
+    <script src="../plugins/laydate/laydate.js"></script> <!-- 改成你的路径 -->
 </head>
-<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="orderItemController" >
+<body class="hold-transition skin-red sidebar-mini" ng-app="pinyougou" ng-controller="orderItemController" ng-init="findBySellerId()">
   <!-- .box-body -->
                     <div class="box-header with-border">
-                        <h3 class="box-title">管理</h3>
+                        <h3 class="box-title">订单管理</h3>
                     </div>
 
                     <div class="box-body">
@@ -36,69 +36,67 @@
                         <!-- 数据表格 -->
                         <div class="table-box">
 
-                            <!--工具栏-->
-                            <div class="pull-left">
-                                <div class="form-group form-inline">
-                                    <div class="btn-group">
-                                        <button type="button" class="btn btn-default" title="新建" data-toggle="modal" data-target="#editModal" ng-click="entity={}"><i class="fa fa-file-o"></i> 新建</button>
-                                        <button type="button" class="btn btn-default" title="删除" ng-click="dele()"><i class="fa fa-trash-o"></i> 删除</button>           
-                                        <button type="button" class="btn btn-default" title="刷新" onclick="window.location.reload();"><i class="fa fa-refresh"></i> 刷新</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="box-tools pull-right">
-                                <div class="has-feedback">							       
-                                </div>
+                        <!--工具栏-->
+                        <div class="box-tools pull-right">
+                            <div class="has-feedback">
+                                状态:<select ng-model="entity.status">
+                                <option value="">全部</option>
+                                <option value="1">未付款</option>
+                                <option value="2">已付款</option>
+                                <option value="3">未发货</option>
+                                <option value="4">已发货</option>
+                                <option value="5">交易成功</option>
+                                <option value="6">交易关闭</option>
+                                <option value="7">待评价</option>
+                            </select>
+
+                                时间范围:<select ng-model="entity.checkType"  >
+                                <!--  <option value="">请选择查询类型</option>-->
+                                <option value="1">日订单</option>
+                                <option value="2">周订单</option>
+                                <option value="3">月订单</option>
+                            </select>
+                                订单日期：<input type="text" id="test">
+                                <button class="btn btn-default" ng-click="selectByRecord()">查询</button>
                             </div>
                             <!--工具栏/-->
-
-			                  <!--数据列表-->
-			                  <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
-			                      <thead>
-			                          <tr>
-			                              <th class="" style="padding-right:0px">
-			                                  <input id="selall" type="checkbox" class="icheckbox_square-blue">
-			                              </th> 
-										                               <th class="sorting"></th>			
-                             <th class="sorting">商品id</th>			
-                             <th class="sorting">SPU_ID</th>			
-                             <th class="sorting">订单id</th>			
-                             <th class="sorting">商品标题</th>			
-                             <th class="sorting">商品单价</th>			
-                             <th class="sorting">商品购买数量</th>			
-                             <th class="sorting">商品总金额</th>			
-                             <th class="sorting">商品图片地址</th>			
-                             <th class="sorting"></th>			
-								     				
-					                      <th class="text-center">操作</th>
-			                          </tr>
-			                      </thead>
-			                      <tbody>
-			                          <tr ng-repeat="entity in list">
-			                              <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>			                              
-				                                                       <td>{{entity.id}}</td>			
-                             <td>{{entity.itemId}}</td>			
-                             <td>{{entity.goodsId}}</td>			
-                             <td>{{entity.orderId}}</td>			
-                             <td>{{entity.title}}</td>			
-                             <td>{{entity.price}}</td>			
-                             <td>{{entity.num}}</td>			
-                             <td>{{entity.totalFee}}</td>			
-                             <td>{{entity.picPath}}</td>			
-                             <td>{{entity.sellerId}}</td>			
-		                                 
-		                                  <td class="text-center">                                           
-		                                 	  <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)" >修改</button>                                           
-		                                  </td>
-			                          </tr>									 
-			                      </tbody>
-			                  </table>
-			                  <!--数据列表/-->                        
                         </div>
+                            <!--数据列表-->
+                            <table id="dataList" class="table table-bordered table-striped table-hover dataTable">
+                                <thead>
+                                <tr>
+                                    <th class="" style="padding-right:0px">
+                                        <input id="selall" type="checkbox" class="icheckbox_square-blue">
+                                    </th>
+                                    <th class="sorting">商品名称</th>
+                                    <th class="sorting">商品价格</th>
+                                    <th class="sorting">商品数量</th>
+                                    <th class="sorting">商品总金额</th>
+                                    <th class="sorting">订单来源</th>
+                                    <th class="sorting">创建时间</th>
+                                    <th class="sorting">状态</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr ng-repeat="entity in list">
+                                    <td><input  type="checkbox" ng-click="updateSelection($event,entity.id)"></td>
+                                    <td>{{entity.goodsName}}</td>
+                                    <td>{{entity.price}}</td>
+                                    <td>{{entity.num}}</td>
+                                    <td>{{entity.totalFee}}</td>
+                                    <td>{{sourceType[entity.sourceType]}}</td>
+                                    <td>{{entity.createTime}}</td>
+                                    <td>{{status[entity.status]}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <!--数据列表/-->
+
                         <!-- 数据表格 /-->
                         <!-- 分页 -->
-						<tm-pagination conf="paginationConf"></tm-pagination>
-                     </div>
+                        <!--<tm-pagination conf="paginationConf"></tm-pagination>-->
+                        </div>
+                    </div>
                     <!-- /.box-body -->
          
 <!-- 编辑窗口 -->

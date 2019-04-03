@@ -28,5 +28,13 @@ app.service('orderItemService',function($http){
 	//搜索
 	this.search=function(page,rows,searchEntity){
 		return $http.post('../orderItem/search.do?page='+page+"&rows="+rows, searchEntity);
-	}    	
+	}
+	//订单列表显示
+	this.findBySellerId=function () {
+		return $http.get('../orderItem/findBySellerId.do');
+	}
+	//订单的模糊查询
+	this.selectByRecord=function(entity){
+		return $http.post('../orderItem/selectByRecord.do',entity);
+	}
 });

@@ -1,5 +1,5 @@
  //控制层 
-app.controller('sellerController' ,function($scope,$controller   ,sellerService){	
+app.controller('sellerController' ,function($scope,$controller,sellerService){
 	
 	$controller('baseController',{$scope:$scope});//继承
 	
@@ -10,9 +10,14 @@ app.controller('sellerController' ,function($scope,$controller   ,sellerService)
 				$scope.list=response;
 			}			
 		);
-	}    
-	
-	//分页
+	}
+
+
+
+
+
+
+    //分页
 	$scope.findPage=function(page,rows){			
 		sellerService.findPage(page,rows).success(
 			function(response){

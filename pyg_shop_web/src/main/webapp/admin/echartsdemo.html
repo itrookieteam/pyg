@@ -14,9 +14,7 @@
 
 
     <script type="text/javascript" src="../plugins/angularjs/angular.min.js"></script>
-    <script type="text/javascript" src="../plugins/angularjs/pagination.js"></script>
-    <link rel="stylesheet" href="../plugins/angularjs/pagination.css">
-    <script type="text/javascript" src="../js/base_pagination.js" ></script>
+    <script type="text/javascript" src="../js/base.js" ></script>
     <script type="text/javascript" src="../js/service/goodsService.js" ></script>
     <script type="text/javascript" src="../js/service/itemCatService.js"></script>
     <script type="text/javascript" src="../js/service/uploadService.js"></script>
@@ -28,108 +26,8 @@
     <script type="text/javascript" src="../js/controller/statisticController.js" ></script>
 </head>
 <body ng-app="pinyougou" ng-controller="statisticController" ng-init="findAll()">
-<div id="main" style="width: 800px;height: 600px;"></div>
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('main'));
+<div id="main" style="width: 1200px;height: 700px;"></div>
 
-    option = {
-        tooltip: {
-            trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
-        },
-        legend: {
-            orient: 'vertical',
-            x: 'left',
-            data:['直达','营销广告','搜索引擎','邮件营销','联盟广告','视频广告','百度','谷歌','必应','其他']
-        },
-        series: [
-            {
-                name:'访问来源',
-                type:'pie',
-                selectedMode: 'single',
-                radius: [0, '35%'],
-
-                label: {
-                    normal: {
-                        position: 'inner'
-                    }
-                },
-                labelLine: {
-                    normal: {
-                        show: false
-                    }
-                },
-                data:[
-                    {value:335, name:'直达', selected:true},
-                    /*{value:679, name:'营销广告'},
-                    {value:1548, name:'搜索引擎'}*/
-                ]
-            },
-            {
-                name:'访问来源',
-                type:'pie',
-                radius: ['40%', '55%'],
-                label: {
-                    normal: {
-                        formatter: '{a|{a}}{abg|}\n{hr|}\n  {b|{b}：}{c}  {per|{d}%}  ',
-                        backgroundColor: '#eee',
-                        borderColor: '#aaa',
-                        borderWidth: 1,
-                        borderRadius: 4,
-                        // shadowBlur:3,
-                        // shadowOffsetX: 2,
-                        // shadowOffsetY: 2,
-                        // shadowColor: '#999',
-                        // padding: [0, 7],
-                        rich: {
-                            a: {
-                                color: '#999',
-                                lineHeight: 22,
-                                align: 'center'
-                            },
-                            // abg: {
-                            //     backgroundColor: '#333',
-                            //     width: '100%',
-                            //     align: 'right',
-                            //     height: 22,
-                            //     borderRadius: [4, 4, 0, 0]
-                            // },
-                            hr: {
-                                borderColor: '#aaa',
-                                width: '100%',
-                                borderWidth: 0.5,
-                                height: 0
-                            },
-                            b: {
-                                fontSize: 16,
-                                lineHeight: 33
-                            },
-                            per: {
-                                color: '#eee',
-                                backgroundColor: '#334455',
-                                padding: [2, 4],
-                                borderRadius: 2
-                            }
-                        }
-                    }
-                },
-                data:[
-                    {value:335, name:'直达'},
-                    {value:310, name:'邮件营销'},
-                    {value:234, name:'联盟广告'},
-                    {value:135, name:'视频广告'},
-                    {value:1048, name:'百度'},
-                    {value:251, name:'谷歌'},
-                    {value:147, name:'必应'},
-                    {value:102, name:'其他'}
-                ]
-            }
-        ]
-    };
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-</script>
 
 <!--工具栏/-->
     <!--数据列表-->
@@ -139,38 +37,71 @@
             <th class="" style="padding-right:0px">
                 <input id="selall" type="checkbox" class="icheckbox_square-blue">
             </th>
-            <th class="sorting_asc">规格id</th>
+            <!--<th class="sorting_asc">规格id</th>-->
             <th class="sorting">商品名称</th>
-            <th class="sorting">商品价格</th>
+            <!--<th class="sorting">商品价格</th>-->
             <th class="sorting">库存数量</th>
-            <th class="sorting">商品id</th>
+            <!--<th class="sorting">商品id</th>
             <th class="sorting">商家id</th>
             <th class="sorting">状态</th>
-            <th class="text-center">操作</th>
+            <th class="text-center">操作</th>-->
         </tr>
         </thead>
         <tbody>
         <tr ng-repeat="entity in list">
             <td><input ng-click="updateSelection($event,entity.id)" type="checkbox"></td>
-            <td>{{entity.id}}</td>
-            <td>{{entity.title}}</td>
-            <td>{{entity.price}}</td>
-            <td>{{entity.num}}</td>
-            <td>{{entity.goodsId}}</td>
-            <td>{{entity.sellerId}}</td>
-            <td>
-                <span>
-                    {{entity.status}}
-                </span>
-            </td>
+            <!--<td>{{entity.id}}</td>-->
+            <td>{{entity.name}}</td>
+            <!--<td>{{entity.price}}</td>-->
+            <td>{{entity.value}}</td>
+            <!--<td>{{entity.goodsId}}</td>-->
+            <!--<td>{{entity.sellerId}}</td>-->
+            <!--<td>-->
+                <!--<span>-->
+                    <!--{{entity.status}}-->
+                <!--</span>-->
+            <!--</td>-->
             <td class="text-center">
-                <a href="goods_edit.html#?id={{entity.goodsId}}" type="button" class="btn bg-olive btn-xs">修改</a>
+                <button type="button" class="btn bg-olive btn-xs" data-toggle="modal" data-target="#editModal" ng-click="findOne(entity.id)" >修改</button>
             </td>
         </tr>
         </tbody>
     </table>
     <!--数据列表/-->
+<!-- 编辑窗口 -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" >
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h3 id="myModalLabel">编辑</h3>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-striped"  width="800px">
+                    <tr>
 
+                        <td>商品名称</td>
+
+                        <td><input  class="form-control" ng-model="entity.title" placeholder="商品名称" ></td>
+
+                    </tr>
+                    <tr>
+
+                        <td>库存数量</td>
+
+                        <td><input  class="form-control" ng-model="entity.num" placeholder="库存数量" ></td>
+
+                    </tr>
+
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-success" data-dismiss="modal" aria-hidden="true" ng-click="save()">保存</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 
 </html>

@@ -3,6 +3,8 @@ import java.util.List;
 import com.pinyougou.pojo.TbSeckillGoods;
 
 import entity.PageResult;
+import entity.SeckillGoods;
+
 /**
  * 服务层接口
  * @author Administrator
@@ -27,13 +29,13 @@ public interface SeckillGoodsService {
 	/**
 	 * 增加
 	*/
-	public void add(TbSeckillGoods seckillGoods);
+	public void add(SeckillGoods seckillGoods);
 	
 	
 	/**
 	 * 修改
 	 */
-	public void update(TbSeckillGoods seckillGoods);
+	public void update(SeckillGoods seckillGoods);
 	
 
 	/**
@@ -57,5 +59,10 @@ public interface SeckillGoodsService {
 	 * @return
 	 */
 	public PageResult findPage(TbSeckillGoods seckillGoods, int pageNum, int pageSize);
-	
+
+
+	//商家提交审核
+	public void updateStatus(Long [] ids, String status);
+
+    public SeckillGoods findSeckillgoods(Long id);
 }

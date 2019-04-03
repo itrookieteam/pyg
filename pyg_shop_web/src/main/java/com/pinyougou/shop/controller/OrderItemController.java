@@ -1,6 +1,8 @@
 package com.pinyougou.shop.controller;
 import java.util.List;
 
+import entity.OrderDesc;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -37,7 +39,7 @@ public class OrderItemController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult  findPage(int page,int rows){			
+	public PageResult  findPage(int page,int rows){
 		return orderItemService.findPage(page, rows);
 	}
 	
@@ -110,5 +112,19 @@ public class OrderItemController {
 	public PageResult search(@RequestBody TbOrderItem orderItem, int page, int rows  ){
 		return orderItemService.findPage(orderItem, page, rows);		
 	}
-	
+
+	@RequestMapping("/findBySellerId")
+	public List<OrderDesc> findBySellerId(){
+		//从安全框架中获取商家id
+		String sellerId = SecurityContextHolder.getContext().getAuthentication().getName();
+		return orderItemService.findBySellerId(sellerId);
+	}
+
+	@RequestMapping("/selectByRecord")
+	public List<OrderDesc> selectByRecord(@RequestBody OrderDesc orderDesc){
+		String sellerName = SecurityContextHolder.getContext().getAuthentication().getName();
+		orderDesc.setSellerId(sellerName);
+		List<OrderDesc> list = orderItemService.selectByRecord(orderDesc);
+		return list;
+	}
 }

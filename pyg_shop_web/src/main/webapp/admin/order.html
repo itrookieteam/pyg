@@ -65,23 +65,23 @@
                              <th class="sorting">邮费</th>
                              <th class="sorting">状态</th>
                              <th class="sorting">订单创建时间</th>			
-                             <th class="sorting">订单更新时间</th>			
+                             <!--<th class="sorting">订单更新时间</th>			-->
                              <th class="sorting">付款时间</th>			
                              <th class="sorting">发货时间</th>			
-                             <th class="sorting">交易完成时间</th>			
-                             <th class="sorting">交易关闭时间</th>			
+                             <!--<th class="sorting">交易完成时间</th>			-->
+                             <!--<th class="sorting">交易关闭时间</th>			-->
                              <th class="sorting">物流名称</th>			
                              <th class="sorting">物流单号</th>			
                              <th class="sorting">用户id</th>			
                              <th class="sorting">买家留言</th>			
                              <th class="sorting">买家昵称</th>			
                              <th class="sorting">买家是否已经评价</th>			
-                             <th class="sorting">收货人地区名称(省，市，县)街道</th>			
+                             <th class="sorting">收货人地区名称</th>
                              <th class="sorting">收货人手机</th>			
                              <th class="sorting">收货人邮编</th>			
                              <th class="sorting">收货人</th>			
-                             <th class="sorting">过期时间，定期清理</th>			
-                             <th class="sorting">发票类型(普通发票，电子发票，增值税发票)</th>			
+                             <!--<th class="sorting">过期时间，定期清理</th>			-->
+                             <th class="sorting">发票类型</th>
                              <th class="sorting">订单来源</th>
                              <th class="sorting">商家ID</th>			
 								     				
@@ -97,11 +97,11 @@
                              <td>{{entity.postFee}}</td>			
                              <td>{{entity.status}}</td>			
                              <td>{{entity.createTime}}</td>			
-                             <td>{{entity.updateTime}}</td>			
+                             <!--<td>{{entity.updateTime}}</td>			-->
                              <td>{{entity.paymentTime}}</td>			
                              <td>{{entity.consignTime}}</td>			
-                             <td>{{entity.endTime}}</td>			
-                             <td>{{entity.closeTime}}</td>			
+                             <!--<td>{{entity.endTime}}</td>			-->
+                             <!--<td>{{entity.closeTime}}</td>			-->
                              <td>{{entity.shippingName}}</td>			
                              <td>{{entity.shippingCode}}</td>			
                              <td>{{entity.userId}}</td>			
@@ -112,7 +112,7 @@
                              <td>{{entity.receiverMobile}}</td>			
                              <td>{{entity.receiverZipCode}}</td>			
                              <td>{{entity.receiver}}</td>			
-                             <td>{{entity.expire}}</td>			
+                             <!--<td>{{entity.expire}}</td>			-->
                              <td>{{entity.invoiceType}}</td>			
                              <td>{{entity.sourceType}}</td>			
                              <td>{{entity.sellerId}}</td>			
@@ -143,7 +143,7 @@
 			 <table class="table table-bordered table-striped"  width="800px">			
 		      	  		      	<tr>
                              
-<td>实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分</td>
+<td>实付金额</td>
 
                              <td><input  class="form-control" ng-model="entity.payment" placeholder="实付金额。精确到2位小数;单位:元。如:200.07，表示:200元7分" ></td>
 

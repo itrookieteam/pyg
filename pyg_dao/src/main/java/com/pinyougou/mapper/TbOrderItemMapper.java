@@ -2,6 +2,7 @@ package com.pinyougou.mapper;
 
 import com.pinyougou.pojo.TbOrderItem;
 import com.pinyougou.pojo.TbOrderItemExample;
+import entity.OrderDesc;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -94,4 +95,6 @@ public interface TbOrderItemMapper {
      * @mbggenerated Sat Mar 02 16:57:17 CST 2019
      */
     int updateByPrimaryKey(TbOrderItem record);
+     //模糊查询
+    List<OrderDesc> selectByRecord(OrderDesc orderDesc);
 }

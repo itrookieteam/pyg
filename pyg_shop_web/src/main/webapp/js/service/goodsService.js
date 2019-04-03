@@ -5,6 +5,22 @@ app.service('goodsService',function($http){
 	this.findAll=function(){
 		return $http.get('../goods/findAll.do');		
 	}
+
+    //查询对应商品的信息
+    this.findgoodsList=function(){
+        return $http.get('../seckillGoods/findgoodsList.do');
+    }
+    //根据商品的id查询对应sku的信息
+    this.findItemList=function(goodsId){
+        return $http.get('../seckillGoods/findItemList.do?goodsId='+goodsId);
+    }
+
+    //根据sku的id查询对应sku具体商品的信息
+    this.findByParentId=function(goodsId){
+        return $http.get('../seckillGoods/findByParentId.do?goodsId='+goodsId);
+    }
+
+
 	//分页 
 	this.findPage=function(page,rows){
 		return $http.get('../goods/findPage.do?page='+page+'&rows='+rows);

@@ -46,7 +46,14 @@ public class GoodsServiceImpl implements GoodsService {
 	@Autowired
 	private TbSellerMapper sellerMapper;
 
-	
+
+
+
+	@Autowired
+	private TbGoodsMapper tbGoodsMapper;
+
+
+
 	/**
 	 * 查询全部
 	 */
@@ -80,8 +87,42 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDesc.setGoodsId(tbGoods.getId()); //注意dao层新增后获取新增对象的id需要配置xml文件
 		goodsDescMapper.insert(goodsDesc);
 
-		int i = 1/0;
+//		int i = 1/0;
+		this.addItem(goods);
+	}
 
+	
+	/**
+	 * 修改
+	 */
+	@Override
+	public void update(Goods goods){
+		//获取商品对象
+		TbGoods tbGoods = goods.getGoods();
+		tbGoods.setAuditStatus("0"); //新增商品默认为草稿状态
+		goodsMapper.updateByPrimaryKey(tbGoods);//修改商品对象
+
+		//获取商品Desc对象
+		TbGoodsDesc goodsDesc = goods.getGoodsDesc();
+//		System.out.println(tbGoods.getIsEnableSpec());
+		if("0".equals(goods.getGoods().getIsEnableSpec())){
+			goodsDesc.setSpecificationItems("[]");
+		}
+		goodsDescMapper.updateByPrimaryKey(goodsDesc);//更改
+
+		//商品item表：将当前商品的全部item删除，重新添加
+		TbItemExample example = new TbItemExample();
+		example.createCriteria().andGoodsIdEqualTo(tbGoods.getId());
+		itemMapper.deleteByExample(example);
+
+		//重新添加
+		this.addItem(goods);
+	}
+
+	//商品item添加
+	public void addItem (Goods goods ){
+		TbGoods tbGoods = goods.getGoods();
+		TbGoodsDesc goodsDesc = goods.getGoodsDesc();
 		if("1".equals(tbGoods.getIsEnableSpec())){
 			//处理sku列表集合
 			List<TbItem> itemList = goods.getItemList();
@@ -177,21 +218,7 @@ public class GoodsServiceImpl implements GoodsService {
 			itemMapper.insert(item);
 
 		}
-
-
 	}
-
-
-
-	
-	/**
-	 * 修改
-	 */
-	@Override
-	public void update(TbGoods goods){
-		goodsMapper.updateByPrimaryKey(goods);
-	}	
-	
 	/**
 	 * 根据ID获取实体
 	 * @param id
@@ -226,6 +253,16 @@ public class GoodsServiceImpl implements GoodsService {
 			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
 			goods.setIsDelete("1");
 			goodsMapper.updateByPrimaryKey(goods);
+			//逻辑删除商品规格
+			TbItemExample example = new TbItemExample();
+			example.createCriteria().andGoodsIdEqualTo(id);
+			//根据商品id获取所有规格
+			List<TbItem> tbItems = itemMapper.selectByExample(example);
+			//遍历规格，更改状态为3
+			for (TbItem tbItem : tbItems) {
+				tbItem.setStatus("3");
+				itemMapper.updateByPrimaryKey(tbItem);
+			}
 		}		
 	}
 	
@@ -263,7 +300,37 @@ public class GoodsServiceImpl implements GoodsService {
 			TbGoods goods = goodsMapper.selectByPrimaryKey(id);
 			goods.setAuditStatus(status);
 			goodsMapper.updateByPrimaryKey(goods);
+			//查询商品下的所有规格列表
+			TbItemExample example = new TbItemExample();
+			example.createCriteria().andGoodsIdEqualTo(goods.getId());
+			List<TbItem> tbItems = itemMapper.selectByExample(example);
+			//如果商品上架，将规格状态改为正常
+			if("5".equals(status)){
+				for (TbItem tbItem : tbItems) {
+					tbItem.setStatus("1");
+					itemMapper.updateByPrimaryKey(tbItem);
+				}
+			}
+			//如果商品下架，将商品规格改为下架2
+			if("6".equals(status)){
+				for (TbItem tbItem : tbItems) {
+					tbItem.setStatus("2");
+					itemMapper.updateByPrimaryKey(tbItem);
+				}
+			}
 		}
 	}
+
+
+	// 根据商家查询所有商品的信息
+	@Override
+	public List<TbGoods> findgoodsList(String sellerId) {
+		TbGoodsExample example =  new TbGoodsExample();
+        example.createCriteria().andSellerIdEqualTo(sellerId);
+		List<TbGoods> tbGoods = tbGoodsMapper.selectByExample(example);
+		return tbGoods;
+	}
+
+
 
 }
