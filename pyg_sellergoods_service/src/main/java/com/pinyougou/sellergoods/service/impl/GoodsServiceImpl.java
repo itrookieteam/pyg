@@ -87,6 +87,42 @@ public class GoodsServiceImpl implements GoodsService {
 		goodsDesc.setGoodsId(tbGoods.getId()); //注意dao层新增后获取新增对象的id需要配置xml文件
 		goodsDescMapper.insert(goodsDesc);
 
+//		int i = 1/0;
+		this.addItem(goods);
+	}
+
+	
+	/**
+	 * 修改
+	 */
+	@Override
+	public void update(Goods goods){
+		//获取商品对象
+		TbGoods tbGoods = goods.getGoods();
+		tbGoods.setAuditStatus("0"); //新增商品默认为草稿状态
+		goodsMapper.updateByPrimaryKey(tbGoods);//修改商品对象
+
+		//获取商品Desc对象
+		TbGoodsDesc goodsDesc = goods.getGoodsDesc();
+//		System.out.println(tbGoods.getIsEnableSpec());
+		if("0".equals(goods.getGoods().getIsEnableSpec())){
+			goodsDesc.setSpecificationItems("[]");
+		}
+		goodsDescMapper.updateByPrimaryKey(goodsDesc);//更改
+
+		//商品item表：将当前商品的全部item删除，重新添加
+		TbItemExample example = new TbItemExample();
+		example.createCriteria().andGoodsIdEqualTo(tbGoods.getId());
+		itemMapper.deleteByExample(example);
+
+		//重新添加
+		this.addItem(goods);
+	}
+
+	//商品item添加
+	public void addItem (Goods goods ){
+		TbGoods tbGoods = goods.getGoods();
+		TbGoodsDesc goodsDesc = goods.getGoodsDesc();
 		if("1".equals(tbGoods.getIsEnableSpec())){
 			//处理sku列表集合
 			List<TbItem> itemList = goods.getItemList();
@@ -182,21 +218,7 @@ public class GoodsServiceImpl implements GoodsService {
 			itemMapper.insert(item);
 
 		}
-
-
 	}
-
-
-
-	
-	/**
-	 * 修改
-	 */
-	@Override
-	public void update(TbGoods goods){
-		goodsMapper.updateByPrimaryKey(goods);
-	}	
-	
 	/**
 	 * 根据ID获取实体
 	 * @param id

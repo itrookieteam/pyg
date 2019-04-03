@@ -70,4 +70,10 @@ public interface SellerService {
 	 */
 	public void exportExcel() throws Exception;
 
+	/**
+	 * 导入Excel
+	 * @throws Exception
+	 */
+	public void inportExcel(List<TbSeller> sellerList) throws Exception;
+
 }
