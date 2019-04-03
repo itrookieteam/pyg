@@ -39,7 +39,7 @@ public class OrderItemController {
 	 * @return
 	 */
 	@RequestMapping("/findPage")
-	public PageResult  findPage(int page,int rows){			
+	public PageResult  findPage(int page,int rows){
 		return orderItemService.findPage(page, rows);
 	}
 	

@@ -60,6 +60,6 @@ public interface OrderItemService {
 	 */
 	public PageResult findPage(TbOrderItem orderItem, int pageNum, int pageSize);
 
-	//通过sellerId查询处订单信息
+	//通过sellerId查询订单信息
 	public List<OrderDesc> findBySellerId(String sellerId);
 }
