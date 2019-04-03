@@ -24,6 +24,12 @@
             <artifactId>pyg_sellergoods_interface</artifactId>
             <version>1.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>cn.itcast</groupId>
+            <artifactId>pyg_common</artifactId>
+            <version>1.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 
     <build>
